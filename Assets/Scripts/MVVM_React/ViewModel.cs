@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using ModestTree;
-using UniRx;
+using R3;
 using Zenject;
 
 namespace MVVM_React
 {
     public class ViewModel
     {
-        public ReactiveProperty<int> IntValueView { get; } = new ReactiveProperty<int>();
-        public ReactiveProperty<string> StringValueView { get; } = new ReactiveProperty<string>(string.Empty);
-        public ReactiveProperty<string> Status { get; } = new ReactiveProperty<string>("Unsaved");
+        public Observable<int> IntValueView => _intValueView;
+        private readonly ReactiveProperty<int> _intValueView  = new ReactiveProperty<int>();
+        public Observable<string> StringValueView => _stringValueView;
+        private readonly ReactiveProperty<string> _stringValueView  = new ReactiveProperty<string>(string.Empty);
+        public Observable<string> Status => _status;
+        private readonly ReactiveProperty<string> _status = new ReactiveProperty<string>("Unsaved");
       
         private readonly Stack<int> _intValueViewMemory  = new Stack<int>();
         private readonly Stack<string> _stringValueViewMemory  = new Stack<string>();
@@ -21,10 +24,10 @@ namespace MVVM_React
             _model = model;
         
         public void OnMinusButton() =>
-            IntValueViewChange(IntValueView.Value - 1);
+            IntValueViewChange(_intValueView.Value - 1);
 
         public void OnPlusButton() =>
-            IntValueViewChange(IntValueView.Value + 1);
+            IntValueViewChange(_intValueView.Value + 1);
 
         public void OnFieldInput(string input) =>
             StringValueViewChange(input);
@@ -38,39 +41,39 @@ namespace MVVM_React
         private void IntValueViewChange(int newValue)
         {
             SaveIntValueViewState();
-            IntValueView.Value = newValue;
-            Status.Value = "Unsaved";
+            _intValueView.Value = newValue;
+            _status.Value = "Unsaved";
         }
 
         private void StringValueViewChange(string newValue)
         {
             SaveStringValueViewState();
-            StringValueView.Value = newValue;
-            Status.Value = "Unsaved";
+            _stringValueView.Value = newValue;
+            _status.Value = "Unsaved";
         }
 
         private void ChangeModel()
         {
-            _model.IntValueChange(IntValueView.Value); 
-            _model.StringValueChange(StringValueView.Value);
+            _model.IntValueChange(_intValueView.Value); 
+            _model.StringValueChange(_stringValueView.Value);
             _intValueViewMemory.Clear();
             _stringValueViewMemory.Clear();
-            Status.Value = "Saved";
+            _status.Value = "Saved";
         }
 
         private void SaveIntValueViewState() =>
-            _intValueViewMemory.Push(IntValueView.Value);
+            _intValueViewMemory.Push(_intValueView.Value);
 
         private void SaveStringValueViewState() =>
-            _stringValueViewMemory.Push(StringValueView.Value);
+            _stringValueViewMemory.Push(_stringValueView.Value);
 
         private void ReturnBackState()
         {
             if (!_intValueViewMemory.IsEmpty())
-                IntValueView.Value = _intValueViewMemory.Pop();
+                _intValueView.Value = _intValueViewMemory.Pop();
             
             if (!_stringValueViewMemory.IsEmpty())
-                StringValueView.Value = _stringValueViewMemory.Pop();
+                _stringValueView.Value = _stringValueViewMemory.Pop();
         }
     }
 }
