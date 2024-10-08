@@ -36,7 +36,7 @@ namespace MVVM_React
 
             _viewModel.IntValueView.Subscribe(value => { _intView.text = value.ToString(); }).AddTo(_disposable);
             _viewModel.StringValueView.Subscribe(value => { _stringView.text = value; }).AddTo(_disposable);
-            _viewModel.Status.Subscribe(value => { _field.text = value; }).AddTo(_disposable);
+            _viewModel.Status.Subscribe(value => { _statusView.text = value; }).AddTo(_disposable);
         }
 
         private void OnDisable()

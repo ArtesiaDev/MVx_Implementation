@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ModestTree;
-using UniRx;
 using Zenject;
 
 namespace MVVM
@@ -14,7 +13,6 @@ namespace MVVM
         
         private int _intValueView;
         private string _stringValueView  = string.Empty;
-        private readonly string[] _statuses = new string[] { "Saved", "Unsaved" };
         private readonly Stack<int> _intValueViewMemory  = new Stack<int>();
         private readonly Stack<string> _stringValueViewMemory  = new Stack<string>();
         
@@ -44,7 +42,7 @@ namespace MVVM
             SaveIntValueViewState();
             _intValueView = newValue;
             IntValueViewChanged?.Invoke(newValue);
-            StatusChanged?.Invoke(_statuses[1]);
+            StatusChanged?.Invoke(Status.Unsaved.ToString());
         }
 
         private void StringValueViewChange(string newValue)
@@ -52,7 +50,7 @@ namespace MVVM
             SaveStringValueViewState();
             _stringValueView = newValue;
             StringValueViewChanged?.Invoke(newValue);
-            StatusChanged?.Invoke(_statuses[1]);
+            StatusChanged?.Invoke(Status.Unsaved.ToString());
         }
 
         private void ChangeModel()
@@ -61,7 +59,7 @@ namespace MVVM
             _model.StringValueChange(_stringValueView);
             _intValueViewMemory.Clear();
             _stringValueViewMemory.Clear();
-            StatusChanged?.Invoke(_statuses[0]);
+            StatusChanged?.Invoke(Status.Saved.ToString());
         }
 
         private void SaveIntValueViewState() =>

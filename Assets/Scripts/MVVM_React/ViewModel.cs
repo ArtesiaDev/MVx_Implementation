@@ -3,6 +3,7 @@ using ModestTree;
 using R3;
 using Zenject;
 
+
 namespace MVVM_React
 {
     public class ViewModel
@@ -12,7 +13,7 @@ namespace MVVM_React
         public Observable<string> StringValueView => _stringValueView;
         private readonly ReactiveProperty<string> _stringValueView  = new ReactiveProperty<string>(string.Empty);
         public Observable<string> Status => _status;
-        private readonly ReactiveProperty<string> _status = new ReactiveProperty<string>("Unsaved");
+        private readonly ReactiveProperty<string> _status = new ReactiveProperty<string>(MVVM.Status.Unsaved.ToString());
       
         private readonly Stack<int> _intValueViewMemory  = new Stack<int>();
         private readonly Stack<string> _stringValueViewMemory  = new Stack<string>();
@@ -42,14 +43,14 @@ namespace MVVM_React
         {
             SaveIntValueViewState();
             _intValueView.Value = newValue;
-            _status.Value = "Unsaved";
+            _status.Value = MVVM.Status.Unsaved.ToString();
         }
 
         private void StringValueViewChange(string newValue)
         {
             SaveStringValueViewState();
             _stringValueView.Value = newValue;
-            _status.Value = "Unsaved";
+            _status.Value = MVVM.Status.Unsaved.ToString();
         }
 
         private void ChangeModel()
@@ -58,7 +59,7 @@ namespace MVVM_React
             _model.StringValueChange(_stringValueView.Value);
             _intValueViewMemory.Clear();
             _stringValueViewMemory.Clear();
-            _status.Value = "Saved";
+            _status.Value = MVVM.Status.Saved.ToString();
         }
 
         private void SaveIntValueViewState() =>

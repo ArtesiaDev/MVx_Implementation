@@ -1,5 +1,4 @@
-﻿using MVC;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MVVM
 {
